@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RasaKitae — Resep Digital</title>
+
+  <style>
+    :root{
+      --bg:#f6f8ff;
+      --surface:#ffffff;
+      --card:#f3f7ff;
+
+      --text:#0f172a;
+      --muted:#64748b;
+
+      --line:rgba(15,23,42,.10);
+      --shadow:0 16px 45px rgba(2,6,23,.10);
+
+      --green:#16a34a;
+      --blue:#60a5fa;
+
+      --promoGrad:linear-gradient(90deg, rgba(34,197,94,.20), rgba(96,165,250,.14));
+      --pill:rgba(245,158,11,.18);
+      --pillLine:rgba(245,158,11,.35);
+    }
+
+    [data-theme="dark"]{
+      --bg:#0b1220;
+      --surface:rgba(255,255,255,.05);
+      --card:rgba(255,255,255,.06);
+
+      --text:#e5e7eb;
+      --muted:rgba(229,231,235,.72);
+
+      --line:rgba(255,255,255,.12);
+      --shadow:0 18px 55px rgba(0,0,0,.55);
+
+      --promoGrad:linear-gradient(90deg, rgba(34,197,94,.18), rgba(96,165,250,.10));
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    .container{width:min(1120px, 92vw); margin:0 auto;}
+
+    /* HEADER */
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background: color-mix(in oklab, var(--bg) 80%, transparent);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:16px;
+    }
+    .brand{display:flex; align-items:center; gap:12px;}
+    .logo{
+      width:46px; height:46px; border-radius:16px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(34,197,94,.35), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(96,165,250,.35), transparent 55%),
+        var(--surface);
+      border:1px solid var(--line);
+      box-shadow:0 12px 28px rgba(2,6,23,.10);
+      display:grid; place-items:center;
+      font-weight:900; letter-spacing:.6px;
+    }
+    .brand h1{margin:0; font-size:18px; letter-spacing:.2px}
+    .brand p{margin:2px 0 0; font-size:13px; color:var(--muted)}
+
+    /* Toggle */
+    .toggle{
+      width:66px; height:34px; border-radius:999px;
+      border:1px solid var(--line);
+      background:var(--surface);
+      box-shadow:0 12px 26px rgba(2,6,23,.10);
+      position:relative; cursor:pointer;
+    }
+    .knob{
+      width:28px; height:28px; border-radius:999px;
+      position:absolute; top:50%; left:3px;
+      transform:translateY(-50%);
+      display:grid; place-items:center;
+      background:linear-gradient(180deg,#fff,#e5e7eb);
+      transition:left .22s ease;
+      font-size:14px;
+    }
+    .toggle.active .knob{left:35px}
+    [data-theme="dark"] .knob{
+      background:linear-gradient(180deg,#111827,#0b1220);
+      color:#e5e7eb;
+    }
+
+    /* HERO */
+    .heroWrap{padding:22px 0 0;}
+    .heroCard{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card) 92%, var(--surface));
+      border-radius:28px;
+      padding:30px;
+      box-shadow:var(--shadow);
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:22px;
+      align-items:center;
+    }
+    .heroTitle{
+      margin:0 0 10px;
+      font-size: clamp(30px, 3.1vw, 44px);
+      letter-spacing:-.7px;
+      line-height:1.08;
+    }
+    .green{color:var(--green)}
+    .blue{color:var(--blue)}
+    .heroDesc{
+      margin:0 0 14px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.65;
+      max-width: 56ch;
+    }
+    .heroCtas{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top: 6px;
+    }
+    .cta{
+      border-radius:999px;
+      border:1px solid var(--line);
+      padding:11px 14px;
+      font-weight:900;
+      cursor:pointer;
+      letter-spacing:.2px;
+      transition: transform .12s ease;
+      background: var(--surface);
+      color: var(--text);
+    }
+    .cta:hover{transform: translateY(-1px)}
+    .cta.primary{
+      background: linear-gradient(180deg, rgba(34,197,94,1), rgba(22,163,74,1));
+      border-color: rgba(22,163,74,.20);
+      color:#fff;
+      box-shadow:0 14px 30px rgba(22,163,74,.18);
+    }
+
+    /* BANNER */
+    .banner{
+      position: relative;
+      border-radius:22px;
+      border:1px solid var(--line);
+      overflow:hidden;
+      min-height: 260px;
+      background:#eef2da;
+      box-shadow:none;
+    }
+    .bannerImg{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit: cover;
+      object-position:center;
+      display:block;
+    }
+
+    /* LIST SHELL */
+    .listShell{
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      background: color-mix(in oklab, var(--card) 86%, var(--surface));
+      border-radius: 26px;
+      padding: 16px;
+      box-shadow: 0 16px 45px rgba(2,6,23,.08);
+    }
+
+    /* Promo Bar */
+    .promoWrap{padding:0; margin:0 0 14px;}
+    .promoBar{
+      border-radius:20px;
+      border:1px solid var(--line);
+      background: var(--promoGrad);
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      box-shadow:0 18px 40px rgba(2,6,23,.08);
+      overflow:hidden;
+    }
+    .promoLeft{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.3px;}
+    .promoRight{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      max-width: 260px;
+    }
+    .pill{
+      padding:7px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.38);
+      border:1px solid var(--line);
+      font-weight:900;
+      white-space:nowrap;
+      font-size: 13px;
+    }
+    .pill.warn{background: var(--pill); border-color: var(--pillLine);}
+
+    /* VOUCHER BAR */
+    .voucherBar{
+      margin: 0 0 14px;
+      border-radius:20px;
+      border:1px dashed color-mix(in oklab, var(--text) 18%, transparent);
+      background: color-mix(in oklab, var(--surface) 88%, var(--card));
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .voucherLeft{display:flex; gap:10px; align-items:flex-start; min-width:0;}
+    .badge90{
+      flex:0 0 auto;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:900;
+      color:#fff;
+      background: linear-gradient(180deg, rgba(239,68,68,1), rgba(220,38,38,1));
+      border:1px solid rgba(239,68,68,.25);
+      box-shadow:0 12px 28px rgba(239,68,68,.15);
+      white-space:nowrap;
+    }
+    .voucherText{min-width:0;}
+    .voucherText strong{display:block; letter-spacing:.2px;}
+    .voucherText span{display:block; color:var(--muted); font-size:13px; margin-top:2px; line-height:1.35;}
+    .voucherBtn{
+      flex:0 0 auto;
+      border-radius:999px;
+      border: 1px solid rgba(22,163,74,.20);
+      background: linear-gradient(180deg, rgba(34,197,94,1), rgba(22,163,74,1));
+      color:#fff;
+      font-weight:900;
+      padding:11px 14px;
+      cursor:pointer;
+      box-shadow:0 14px 30px rgba(22,163,74,.16);
+      transition:transform .12s ease;
+      white-space:nowrap;
+    }
+    .voucherBtn:hover{transform: translateY(-1px)}
+    .voucherBtn:active{transform: translateY(0px)}
+
+    /* Cards */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:18px;
+      padding: 0;
+    }
+    .card{
+      background:var(--surface);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px 18px 16px;
+      box-shadow: 0 14px 30px rgba(2,6,23,.06);
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      min-height: 138px;
+    }
+    .icon{
+      width:46px; height:46px; border-radius:14px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card) 70%, var(--surface));
+      display:grid; place-items:center;
+      font-size:20px;
+      flex: 0 0 auto;
+    }
+    .card h4{margin:0; font-size:16px; letter-spacing:.2px;}
+    .card p{margin:6px 0 12px; color:var(--muted); font-size:13px; line-height:1.5;}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(22,163,74,.20);
+      background: linear-gradient(180deg, rgba(34,197,94,1), rgba(22,163,74,1));
+      color:#fff;
+      font-weight:900;
+      letter-spacing:.2px;
+      cursor:pointer;
+      box-shadow:0 14px 30px rgba(22,163,74,.18);
+      transition: transform .12s ease;
+    }
+    .btn:hover{transform: translateY(-1px)}
+    .btn:active{transform: translateY(0px)}
+
+    /* About + FAQ */
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 16px;
+    }
+    .panel{
+      border:1px solid var(--line);
+      background: var(--surface);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 14px 30px rgba(2,6,23,.06);
+    }
+    .panel h3{margin:0 0 8px; letter-spacing:.2px;}
+    .panel p{margin:0; color:var(--muted); line-height:1.65; font-size:14px;}
+    details{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 12px;
+      background: color-mix(in oklab, var(--card) 65%, var(--surface));
+      margin-top: 10px;
+    }
+    summary{cursor:pointer; font-weight:900; letter-spacing:.2px;}
+    details p{margin:8px 0 0; color:var(--muted);}
+    footer{
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      padding: 18px 0 24px;
+    }
+
+    /* MODAL VOUCHER */
+    .modalOverlay{
+      position:fixed; inset:0;
+      background:rgba(2,6,23,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:999;
+    }
+    .modalOverlay.show{display:flex;}
+    .modal{
+      width:min(520px, 92vw);
+      border-radius:22px;
+      border:1px solid rgba(255,255,255,.18);
+      background: color-mix(in oklab, var(--surface) 92%, transparent);
+      box-shadow: 0 22px 70px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+    .modalHead{
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid var(--line);
+      background: color-mix(in oklab, var(--card) 70%, var(--surface));
+    }
+    .modalHead strong{letter-spacing:.2px;}
+    .xBtn{
+      border:none;
+      background:transparent;
+      font-size:18px;
+      cursor:pointer;
+      color:var(--muted);
+      padding:6px 10px;
+      border-radius:10px;
+    }
+    .xBtn:hover{background: color-mix(in oklab, var(--card) 70%, var(--surface));}
+    .modalBody{padding:16px;}
+    .codeBox{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      border:1px dashed color-mix(in oklab, var(--text) 18%, transparent);
+      background: color-mix(in oklab, var(--card) 60%, var(--surface));
+      border-radius:18px;
+      padding:12px 12px;
+    }
+    .codeText{
+      font-weight:900;
+      letter-spacing:1px;
+      font-size:16px;
+      user-select:all;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .copyBtn{
+      border-radius:999px;
+      border:1px solid var(--line);
+      padding:10px 12px;
+      font-weight:900;
+      cursor:pointer;
+      background: var(--surface);
+      color: var(--text);
+      transition: transform .12s ease;
+      white-space:nowrap;
+    }
+    .copyBtn:hover{transform: translateY(-1px)}
+    .hint{margin-top:10px; color:var(--muted); font-size:13px; line-height:1.5;}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .heroCard{grid-template-columns:1fr}
+      .banner{min-height:240px}
+      .grid{grid-template-columns: repeat(2, 1fr);}
+      .twoCol{grid-template-columns: 1fr;}
+    }
+    @media (max-width: 640px){
+      .container{width:100%; padding: 0 14px;}
+      .nav{padding:12px 0;}
+      .heroCard{padding: 16px; border-radius: 22px; gap: 14px;}
+      .heroCard > div:first-child{ order:2; }
+      .heroCard > .banner{ order:1; }
+      .banner{min-height: 190px; border-radius: 16px;}
+      .listShell{ padding: 12px; border-radius: 22px; }
+      .promoBar{flex-direction: column; align-items:flex-start; gap: 10px; border-radius: 18px;}
+      .promoRight{ max-width: 100%; justify-content:flex-start; }
+      .voucherBar{flex-direction: column; align-items:flex-start; gap:10px; border-radius: 18px;}
+      .voucherBtn{width:100%;}
+      .grid{ grid-template-columns: 1fr; gap: 14px; }
+      .card{ border-radius: 18px; padding: 16px; }
+      .btn{ padding: 12px 14px; font-size: 14px; }
+    }
+    @media (max-width: 390px){
+      .container{ padding: 0 12px; }
+      .brand h1{ font-size: 16px; }
+      .brand p{ font-size: 12px; }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <header>
+    <div class="container">
+      <div class="nav">
+        <div class="brand">
+          <div class="logo">RK</div>
+          <div>
+            <h1>RASAKITAE</h1>
+            <p>Resep Makanan Sehat yang Mudah Dibuat</p>
+          </div>
+        </div>
+
+        <div id="themeToggle" class="toggle" role="button" aria-pressed="false" tabindex="0" title="Toggle Dark Mode">
+          <div id="knob" class="knob">☀️</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HERO -->
+    <section class="heroWrap" id="home">
+      <div class="heroCard">
+        <div>
+          <h2 class="heroTitle">
+            Semua Resep Sehat, <span class="green">Rasakitae</span> <span class="blue">Aja!</span>
+          </h2>
+          <p class="heroDesc">
+            Resep digital sehat dengan langkah jelas, praktis untuk masak harian, bekal, dan ide jualan. 📲🍳
+          </p>
+
+          <div class="heroCtas">
+            <button class="cta primary" type="button" onclick="scrollToId('packs')">Lihat Paket Resep</button>
+            <button class="cta" type="button" onclick="scrollToId('about')">Tentang Rasakitae</button>
+          </div>
+        </div>
+
+        <!-- BANNER GAMBAR -->
+        <div class="banner" aria-label="Banner promo">
+          <img src="gambar2.png" alt="Banner Rasakitae" class="bannerImg">
+        </div>
+      </div>
+    </section>
+
+    <!-- LIST -->
+    <section class="listShell" id="packs">
+      <section class="promoWrap">
+        <div class="promoBar">
+          <div class="promoLeft">
+            <span style="font-size:18px">🔥</span>
+            <span>RESEP DEALS</span>
+          </div>
+          <div class="promoRight">
+            <span class="pill warn">90% OFF</span>
+            <span class="pill">Special Promo!</span>
+          </div>
+        </div>
+
+        <!-- CLAIM VOUCHER -->
+        <div class="voucherBar">
+          <div class="voucherLeft">
+            <div class="badge90">VOUCHER</div>
+            <div class="voucherText">
+              <strong>Klaim voucher kamu sekarang</strong>
+              <span>Klik “Klaim di sini” untuk munculin kode voucher dan bisa langsung di pakai.</span>
+            </div>
+          </div>
+          <button class="voucherBtn" type="button" onclick="openVoucher()">Klaim di sini</button>
+        </div>
+      </section>
+
+      <!-- PRODUK -->
+      <section class="grid" id="productGrid">
+        <!-- Diisi otomatis oleh JS (biar gampang ganti link) -->
+      </section>
+    </section>
+
+    <!-- ABOUT + FAQ -->
+    <section class="twoCol" id="about">
+      <div class="panel">
+        <h3>Tentang Rasakitae</h3>
+        <p>
+          Rasakitae adalah platform resep makanan sehat berbasis digital yang menghadirkan panduan memasak praktis, terstruktur, dan mudah dipahami. Setiap resep dirancang dengan takaran jelas, langkah sederhana, serta pilihan bahan yang mudah ditemukan, sehingga cocok untuk kebutuhan masak harian, bekal sehat, hingga ide jualan rumahan. Rasakitae membantu siapa pun memasak lebih sehat, hemat waktu, dan tetap lezat setiap hari.
+        </p>
+      </div>
+
+      <div class="panel">
+        <h3>FAQ</h3>
+
+        <details>
+          <summary>Format resepnya apa?</summary>
+          <p>Resep tersedia dalam format digital PDF  dengan langkah jelas dan ringkas.</p>
+        </details>
+
+        <details>
+          <summary>Apakah cocok untuk pemula?</summary>
+          <p>Cocok. Resep dibuat sederhana dengan bahan mudah dicari.</p>
+        </details>
+
+        <details>
+          <summary>Setelah beli, dapatnya lewat apa?</summary>
+          <p>Link tombol “Beli” bisa diarahkan ke checkout lalu mendapatkan file PDF nya.</p>
+        </details>
+      </div>
+    </section>
+
+    <footer>© 2025 Rasakitae • Resep Digital</footer>
+  </main>
+
+  <!-- MODAL VOUCHER -->
+  <div class="modalOverlay" id="voucherModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="voucherTitle">
+      <div class="modalHead">
+        <strong id="voucherTitle">Voucher Rasakitae</strong>
+        <button class="xBtn" type="button" onclick="closeVoucher()" aria-label="Tutup">✕</button>
+      </div>
+      <div class="modalBody">
+        <div style="font-weight:900; letter-spacing:.2px;">Ini kode voucher kamu:</div>
+
+        <div class="codeBox">
+          <div class="codeText" id="voucherCodeText">RASAKITAE90</div>
+          <button class="copyBtn" type="button" onclick="copyVoucher()">Salin</button>
+        </div>
+
+        <div class="hint" id="copyHint">
+          Setelah disalin, tempel di checkout saat order.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ====== TEMPAT NARUH LINK PRODUK (EDIT DI SINI) ======
+    const PRODUCTS = [
+  {
+    name: "Resep Tahu Kukus Sayur Sehat",
+    icon: "🍽️", // menu sehat / hidangan utama
+    desc: "Resep tahu kukus rendah minyak yang kaya serat dan protein nabati, mudah dibuat dengan bahan sederhana.",
+    url: "http://lynk.id/rasakitae/8m1gkzdwrk2v/checkout"
+  },
+  {
+    name: "Resep Sup Bening Ayam Sayur",
+    icon: "🍲", // sup
+    desc: "Sup hangat rendah lemak dengan ayam dan sayur segar, cocok untuk menu sehat harian.",
+    url: "http://lynk.id/rasakitae/3o6wlp46zlz6/checkout"
+  },
+  {
+    name: "Resep Tumis Jamur Tanpa Minyak",
+    icon: "🍳", // proses memasak / tumis
+    desc: "Tumis jamur praktis tanpa minyak, gurih alami dan ramah diet.",
+    url: "http://lynk.id/rasakitae/zej1yz6z1r17/checkout"
+  },
+  {
+    name: "Resep Pepes Tahu Sayur Sehat",
+    icon: "♨️", // kukus / pepes
+    desc: "Pepes tahu kaya rempah dengan sayuran, lezat tanpa digoreng dan menyehatkan tubuh.",
+    url: "http://lynk.id/rasakitae/op75ljympmky/checkout"
+  },
+  {
+    name: "Resep Sayur Rebus Sambal Sehat",
+    icon: "🥗", // sayur rebus / salad
+    desc: "Sayuran rebus segar dengan sambal sehat, rendah kalori dan tetap nikmat.",
+    url: "http://lynk.id/rasakitae/r2o1ygmgyn3l/checkout"
+  },
+  {
+    name: "Resep Oseng Tempe Sayur Sehat",
+    icon: "🔥", // oseng / masak cepat
+    desc: "Oseng tempe bernutrisi tinggi, kaya protein nabati, pas untuk menu sehat cocok dikonsumsi setiap hari.",
+    url: "http://lynk.id/rasakitae/y5j42g4vr9wp/checkout"
+  },
+];
+
+
+    // ====== Render produk ke grid (biar ga perlu copy-paste card) ======
+    const grid = document.getElementById("productGrid");
+    grid.innerHTML = PRODUCTS.map((p) => `
+      <article class="card">
+        <div class="icon">${p.icon}</div>
+        <div style="flex:1">
+          <h4>${p.name}</h4>
+          <p>${p.desc}</p>
+          <button class="btn" type="button" onclick="openPack('${escapeQuotes(p.name)}')">Beli Sekarang</button>
+        </div>
+      </article>
+    `).join("");
+
+    function escapeQuotes(str){
+      return String(str).replace(/'/g, "\\'");
+    }
+
+    // ====== Open link sesuai produk ======
+    function openPack(name){
+      const item = PRODUCTS.find(p => p.name === name);
+      if(!item || !item.url){
+        alert("Link belum diisi untuk: " + name);
+        return;
+      }
+      window.open(item.url, "_blank", "noopener");
+    }
+
+    // ====== Theme toggle ======
+    const body = document.body;
+    const toggle = document.getElementById("themeToggle");
+    const knob = document.getElementById("knob");
+
+    function setTheme(t){
+      body.setAttribute("data-theme", t);
+      const dark = t === "dark";
+      toggle.classList.toggle("active", dark);
+      toggle.setAttribute("aria-pressed", String(dark));
+      knob.textContent = dark ? "🌙" : "☀️";
+      localStorage.setItem("theme", t);
+    }
+    const saved = localStorage.getItem("theme");
+    setTheme(saved === "dark" ? "dark" : "light");
+
+    function toggleTheme(){
+      const now = body.getAttribute("data-theme");
+      setTheme(now === "dark" ? "light" : "dark");
+    }
+    toggle.addEventListener("click", toggleTheme);
+    toggle.addEventListener("keydown", (e)=>{
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggleTheme(); }
+    });
+
+    // ====== Smooth scroll ======
+    function scrollToId(id){
+      document.getElementById(id).scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    // ====== Voucher ======
+    const VOUCHER_CODE = "MAKAN SEHAT"; // ganti sesuai mau kamu
+    const voucherModal = document.getElementById("voucherModal");
+    const voucherCodeText = document.getElementById("voucherCodeText");
+    const copyHint = document.getElementById("copyHint");
+
+    function openVoucher(){
+      voucherCodeText.textContent = VOUCHER_CODE;
+      copyHint.textContent = "Setelah disalin, tempel di checkout saat order.";
+      voucherModal.classList.add("show");
+      voucherModal.setAttribute("aria-hidden", "false");
+    }
+    function closeVoucher(){
+      voucherModal.classList.remove("show");
+      voucherModal.setAttribute("aria-hidden", "true");
+    }
+    voucherModal.addEventListener("click", (e)=>{
+      if(e.target === voucherModal) closeVoucher();
+    });
+    document.addEventListener("keydown", (e)=>{
+      if(e.key === "Escape" && voucherModal.classList.contains("show")) closeVoucher();
+    });
+
+    async function copyVoucher(){
+      const text = VOUCHER_CODE;
+      try{
+        await navigator.clipboard.writeText(text);
+        copyHint.textContent = "✅ Kode voucher berhasil disalin!";
+      }catch(err){
+        const range = document.createRange();
+        range.selectNodeContents(voucherCodeText);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        copyHint.textContent = "Tidak bisa auto-copy. Blok teksnya lalu tekan Ctrl+C.";
+      }
+    }
+  </script>
+</body>
+</html>
