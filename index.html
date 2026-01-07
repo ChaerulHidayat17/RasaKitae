@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RasaKitae — Resep Digital</title>
+  <title>RasaKitae — Resep Digital Sehat</title>
 
   <style>
     :root{
@@ -23,6 +23,11 @@
       --promoGrad:linear-gradient(90deg, rgba(34,197,94,.20), rgba(96,165,250,.14));
       --pill:rgba(245,158,11,.18);
       --pillLine:rgba(245,158,11,.35);
+
+      --danger: rgba(239,68,68,1);
+      --danger2: rgba(220,38,38,1);
+
+      --glow: 0 18px 60px rgba(34,197,94,.14);
     }
 
     [data-theme="dark"]{
@@ -37,6 +42,7 @@
       --shadow:0 18px 55px rgba(0,0,0,.55);
 
       --promoGrad:linear-gradient(90deg, rgba(34,197,94,.18), rgba(96,165,250,.10));
+      --glow: 0 18px 70px rgba(34,197,94,.10);
     }
 
     *{box-sizing:border-box}
@@ -46,8 +52,8 @@
       background:var(--bg);
       color:var(--text);
     }
-
     .container{width:min(1120px, 92vw); margin:0 auto;}
+    a{color:inherit; text-decoration:none}
 
     /* HEADER */
     header{
@@ -100,7 +106,7 @@
     }
 
     /* HERO */
-    .heroWrap{padding:22px 0 0;}
+    .heroWrap{padding:18px 0 0;}
     .heroCard{
       border:1px solid var(--line);
       background: color-mix(in oklab, var(--card) 92%, var(--surface));
@@ -108,42 +114,107 @@
       padding:30px;
       box-shadow:var(--shadow);
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap:22px;
-      align-items:center;
+      grid-template-columns: 1.08fr .92fr;
+      gap:26px;
+      align-items:start;
+      position:relative;
+      overflow:hidden;
     }
+    .heroCard:before{
+      content:"";
+      position:absolute; inset:-80px -60px auto auto;
+      width:260px; height:260px;
+      background: radial-gradient(circle at 30% 30%, rgba(34,197,94,.18), transparent 60%),
+                  radial-gradient(circle at 70% 70%, rgba(96,165,250,.18), transparent 60%);
+      pointer-events:none;
+    }
+
+    .tagRow{
+      display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;
+    }
+    .tag{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--surface) 82%, transparent);
+      border-radius:999px;
+      padding:8px 12px;
+      font-weight:900;
+      font-size:12.5px;
+      line-height:1;
+      color: color-mix(in oklab, var(--text) 88%, var(--muted));
+    }
+
     .heroTitle{
-      margin:0 0 10px;
+      margin:0 0 12px;
       font-size: clamp(30px, 3.1vw, 44px);
       letter-spacing:-.7px;
-      line-height:1.08;
+      line-height:1.05;
+      max-width:22ch;
     }
     .green{color:var(--green)}
     .blue{color:var(--blue)}
     .heroDesc{
       margin:0 0 14px;
       color:var(--muted);
-      font-size:16px;
+      font-size:15.5px;
       line-height:1.65;
-      max-width: 56ch;
+      max-width:62ch;
     }
+
+    /* Trust badges: grid 2x2 */
+    .trustRow{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:10px;
+      margin: 14px 0 14px;
+    }
+    .trustItem{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--surface) 86%, var(--card));
+      border-radius:16px;
+      padding:10px 12px;
+      font-weight:900;
+      font-size:12.5px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color: color-mix(in oklab, var(--text) 86%, var(--muted));
+      white-space:normal;
+    }
+
+    /* miniProof: 3 kolom */
+    .miniProof{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:12px;
+      margin: 12px 0 18px;
+    }
+    .proofItem{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--surface) 86%, var(--card));
+      border-radius:18px;
+      padding:12px;
+    }
+    .proofItem strong{display:block; font-size:13.5px; letter-spacing:.2px; line-height:1.2;}
+    .proofItem span{display:block; font-size:12.5px; color:var(--muted); margin-top:4px; line-height:1.4;}
+
     .heroCtas{
       display:flex;
-      gap:10px;
+      gap:12px;
       flex-wrap:wrap;
       align-items:center;
-      margin-top: 6px;
+      margin-top: 8px;
     }
     .cta{
       border-radius:999px;
       border:1px solid var(--line);
-      padding:11px 14px;
+      padding:12px 16px;
       font-weight:900;
       cursor:pointer;
       letter-spacing:.2px;
-      transition: transform .12s ease;
+      transition: transform .12s ease, filter .12s ease;
       background: var(--surface);
       color: var(--text);
+      font-size:14px;
     }
     .cta:hover{transform: translateY(-1px)}
     .cta.primary{
@@ -152,32 +223,61 @@
       color:#fff;
       box-shadow:0 14px 30px rgba(22,163,74,.18);
     }
+    .cta.ghost{
+      background: transparent;
+      border-color: color-mix(in oklab, var(--text) 14%, transparent);
+    }
 
-    /* BANNER */
-    .banner{
-      position: relative;
+    /* HERO MOCKUP */
+    .mockWrap{
       border-radius:22px;
       border:1px solid var(--line);
+      background: color-mix(in oklab, var(--surface) 78%, var(--card));
+      box-shadow: 0 18px 55px rgba(2,6,23,.10);
+      min-height: 320px;
       overflow:hidden;
-      min-height: 260px;
-      background:#eef2da;
-      box-shadow:none;
+      position:relative;
+      display:grid;
+      place-items:center;
+      padding: 14px;
     }
-    .bannerImg{
-      position:absolute; inset:0;
-      width:100%; height:100%;
-      object-fit: cover;
-      object-position:center;
+    .mockWrap:before{
+      content:"";
+      position:absolute; inset:-40px -40px auto auto;
+      width:240px; height:240px;
+      background: radial-gradient(circle, rgba(96,165,250,.18), transparent 62%);
+      pointer-events:none;
+    }
+    .mockHeroImg{
+      width:100%;
+      height:100%;
+      max-height: 310px;
+      object-fit: contain;
       display:block;
+      filter: drop-shadow(0 24px 60px rgba(2,6,23,.18));
+    }
+    .mockBadge{
+      position:absolute;
+      left:14px;
+      bottom:14px;
+      border-radius:999px;
+      padding:10px 12px;
+      font-weight:900;
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(2,6,23,.35);
+      color:#fff;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 30px rgba(0,0,0,.25);
+      letter-spacing:.2px;
     }
 
-    /* LIST SHELL */
+    /* SECTION SHELL */
     .listShell{
       margin-top: 16px;
       border: 1px solid var(--line);
       background: color-mix(in oklab, var(--card) 86%, var(--surface));
       border-radius: 26px;
-      padding: 16px;
+      padding: 18px;
       box-shadow: 0 16px 45px rgba(2,6,23,.08);
     }
 
@@ -201,7 +301,7 @@
       gap:10px;
       flex-wrap:wrap;
       justify-content:flex-end;
-      max-width: 260px;
+      max-width: 320px;
     }
     .pill{
       padding:7px 10px;
@@ -213,6 +313,54 @@
       font-size: 13px;
     }
     .pill.warn{background: var(--pill); border-color: var(--pillLine);}
+
+    /* PAS SECTION */
+    .pas{
+      margin: 0 0 14px;
+      border-radius:22px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--surface) 88%, var(--card));
+      padding: 14px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 12px;
+      align-items:center;
+      overflow:hidden;
+      position:relative;
+    }
+    .pas:after{
+      content:"";
+      position:absolute; inset:auto -40px -60px auto;
+      width:220px; height:220px;
+      background: radial-gradient(circle, rgba(96,165,250,.18), transparent 62%);
+      pointer-events:none;
+    }
+    .pas h3{margin:0 0 6px; letter-spacing:.2px;}
+    .pas p{margin:0; color:var(--muted); line-height:1.65; font-size:14px;}
+    .pas ul{margin:10px 0 0; padding-left: 18px; color: var(--muted); font-size: 14px; line-height:1.7;}
+    .pasBox{
+      border-radius:18px;
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card) 70%, var(--surface));
+      padding:12px;
+      box-shadow: 0 14px 28px rgba(2,6,23,.06);
+    }
+    .pasBox strong{display:block; letter-spacing:.2px;}
+    .pasBox span{display:block; color:var(--muted); font-size:13px; margin-top:4px; line-height:1.5;}
+    .pasBox .ctaSmall{
+      margin-top:10px;
+      width:100%;
+      border-radius:999px;
+      padding:11px 12px;
+      font-weight:900;
+      border:1px solid rgba(22,163,74,.20);
+      background: linear-gradient(180deg, rgba(34,197,94,1), rgba(22,163,74,1));
+      color:#fff;
+      cursor:pointer;
+      box-shadow: var(--glow);
+      transition: transform .12s ease;
+    }
+    .pasBox .ctaSmall:hover{transform: translateY(-1px);}
 
     /* VOUCHER BAR */
     .voucherBar{
@@ -233,7 +381,7 @@
       border-radius:999px;
       font-weight:900;
       color:#fff;
-      background: linear-gradient(180deg, rgba(239,68,68,1), rgba(220,38,38,1));
+      background: linear-gradient(180deg, var(--danger), var(--danger2));
       border:1px solid rgba(239,68,68,.25);
       box-shadow:0 12px 28px rgba(239,68,68,.15);
       white-space:nowrap;
@@ -257,38 +405,103 @@
     .voucherBtn:hover{transform: translateY(-1px)}
     .voucherBtn:active{transform: translateY(0px)}
 
-    /* Cards */
+    /* PRODUCT GRID (clean + rata) */
     .grid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
-      gap:18px;
+      gap:22px;
       padding: 0;
     }
+
     .card{
       background:var(--surface);
       border:1px solid var(--line);
-      border-radius:20px;
-      padding:18px 18px 16px;
-      box-shadow: 0 14px 30px rgba(2,6,23,.06);
+      border-radius:24px;
+      padding:16px;
+      box-shadow: 0 16px 40px rgba(2,6,23,.07);
       display:flex;
-      gap:14px;
-      align-items:flex-start;
-      min-height: 138px;
+      flex-direction:column;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      min-height: 360px;
     }
-    .icon{
-      width:46px; height:46px; border-radius:14px;
-      border:1px solid var(--line);
-      background: color-mix(in oklab, var(--card) 70%, var(--surface));
-      display:grid; place-items:center;
-      font-size:20px;
-      flex: 0 0 auto;
+    .card:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 28px 80px rgba(2,6,23,.12);
+      border-color: color-mix(in oklab, var(--text) 14%, transparent);
     }
-    .card h4{margin:0; font-size:16px; letter-spacing:.2px;}
-    .card p{margin:6px 0 12px; color:var(--muted); font-size:13px; line-height:1.5;}
+
+    .product-img{
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      background: color-mix(in oklab, var(--card) 60%, var(--surface));
+      border: 1px solid var(--line);
+      margin-bottom: 14px;
+      height: 190px;
+      display:grid;
+      place-items:center;
+    }
+    .product-img::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(34,197,94,.10), rgba(96,165,250,.08));
+      pointer-events:none;
+    }
+    .product-img img{
+      width: 92%;
+      height: 92%;
+      object-fit: contain;
+      display:block;
+      filter: drop-shadow(0 18px 45px rgba(2,6,23,.16)) saturate(1.05) contrast(1.03);
+      transition: transform .25s ease;
+    }
+    .card:hover .product-img img{ transform: scale(1.03); }
+
+    .bestBadge{
+      position:absolute;
+      left:12px;
+      top:12px;
+      z-index:2;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12px;
+      border:1px solid rgba(245,158,11,.35);
+      background: rgba(245,158,11,.20);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 30px rgba(2,6,23,.12);
+    }
+
+    .card h4{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.2px;
+      line-height:1.25;
+      display:-webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow:hidden;
+      min-height: 40px;
+    }
+    .card p{
+      margin:8px 0 14px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.65;
+      display:-webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow:hidden;
+      min-height: 64px;
+    }
+
     .btn{
-      display:inline-flex; align-items:center; justify-content:center;
+      margin-top:auto;
       width: 100%;
-      padding: 11px 12px;
+      padding: 12px 14px;
       border-radius: 999px;
       border: 1px solid rgba(22,163,74,.20);
       background: linear-gradient(180deg, rgba(34,197,94,1), rgba(22,163,74,1));
@@ -296,13 +509,25 @@
       font-weight:900;
       letter-spacing:.2px;
       cursor:pointer;
-      box-shadow:0 14px 30px rgba(22,163,74,.18);
-      transition: transform .12s ease;
+      box-shadow:0 16px 36px rgba(22,163,74,.20);
+      transition: transform .12s ease, filter .12s ease;
     }
-    .btn:hover{transform: translateY(-1px)}
-    .btn:active{transform: translateY(0px)}
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.03); }
+    .btn:active{ transform: translateY(0px); }
 
-    /* About + FAQ */
+    .note{
+      margin-top:14px;
+      padding:10px 12px;
+      border-radius:14px;
+      border: 1px solid var(--line);
+      background: color-mix(in oklab, var(--surface) 85%, var(--card));
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+      text-align:center;
+    }
+
+    /* SOCIAL PROOF */
     .twoCol{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -317,7 +542,38 @@
       box-shadow: 0 14px 30px rgba(2,6,23,.06);
     }
     .panel h3{margin:0 0 8px; letter-spacing:.2px;}
-    .panel p{margin:0; color:var(--muted); line-height:1.65; font-size:14px;}
+    .panel p{margin:0; color:var(--muted); line-height:1.7; font-size:14px;}
+
+    .proofGrid{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .tCard{
+      border:1px solid var(--line);
+      background: color-mix(in oklab, var(--card) 68%, var(--surface));
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .tTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:6px;
+    }
+    .tName{font-weight:900; letter-spacing:.2px;}
+    .tStars{font-size: 13px; color: color-mix(in oklab, var(--text) 85%, var(--muted));}
+    .tMsg{margin:0; color:var(--muted); font-size:13px; line-height:1.55;}
+    .tTag{
+      display:inline-flex;
+      margin-top:8px;
+      padding:6px 9px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.35);
+      font-weight:900;
+      font-size:12px;
+    }
+
     details{
       border:1px solid var(--line);
       border-radius: 16px;
@@ -327,11 +583,81 @@
     }
     summary{cursor:pointer; font-weight:900; letter-spacing:.2px;}
     details p{margin:8px 0 0; color:var(--muted);}
+
+    /* FINAL CTA */
+    .finalCta{
+      margin-top: 16px;
+      border-radius: 26px;
+      border: 1px solid var(--line);
+      background: linear-gradient(90deg,
+        color-mix(in oklab, rgba(34,197,94,.18) 80%, var(--surface)),
+        color-mix(in oklab, rgba(96,165,250,.14) 80%, var(--surface))
+      );
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+    }
+    .finalCta strong{font-size:16px; letter-spacing:.2px;}
+    .finalCta span{display:block; color:var(--muted); margin-top:3px; font-size:13px; line-height:1.5;}
+    .finalBtn{
+      border-radius:999px;
+      border: 1px solid rgba(22,163,74,.20);
+      background: linear-gradient(180deg, rgba(34,197,94,1), rgba(22,163,74,1));
+      color:#fff;
+      font-weight:900;
+      padding:12px 14px;
+      cursor:pointer;
+      box-shadow:0 14px 30px rgba(22,163,74,.16);
+      transition:transform .12s ease;
+      white-space:nowrap;
+    }
+    .finalBtn:hover{transform: translateY(-1px)}
+
     footer{
       text-align:center;
       color:var(--muted);
       font-size:13px;
       padding: 18px 0 24px;
+    }
+
+    /* STICKY CTA (Mobile) */
+    .stickyCta{
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      padding: 12px 14px;
+      display: none;
+      gap: 10px;
+      z-index: 999;
+      background: color-mix(in oklab, var(--bg) 85%, transparent);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--line);
+    }
+    .stickyBtn{
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      padding: 12px 14px;
+      font-weight: 900;
+      cursor: pointer;
+      letter-spacing: .2px;
+      transition: transform .12s ease;
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 16px 40px rgba(2,6,23,.10);
+    }
+    .stickyBtn:hover{ transform: translateY(-1px); }
+    .stickyBtn.primary{
+      border-color: rgba(22,163,74,.20);
+      background: linear-gradient(180deg, rgba(34,197,94,1), rgba(22,163,74,1));
+      color:#fff;
+    }
+    .stickyBtn.ghost{
+      background: transparent;
+      border-color: color-mix(in oklab, var(--text) 14%, transparent);
     }
 
     /* MODAL VOUCHER */
@@ -342,7 +668,7 @@
       align-items:center;
       justify-content:center;
       padding:18px;
-      z-index:999;
+      z-index:9999;
     }
     .modalOverlay.show{display:flex;}
     .modal{
@@ -411,25 +737,32 @@
     /* Responsive */
     @media (max-width: 980px){
       .heroCard{grid-template-columns:1fr}
-      .banner{min-height:240px}
+      .miniProof{grid-template-columns: repeat(2, minmax(0,1fr));}
       .grid{grid-template-columns: repeat(2, 1fr);}
       .twoCol{grid-template-columns: 1fr;}
+      .pas{grid-template-columns:1fr;}
+      .proofGrid{grid-template-columns: 1fr;}
     }
     @media (max-width: 640px){
+      body{ padding-bottom: 74px; }
+      .stickyCta{ display: flex; }
+
       .container{width:100%; padding: 0 14px;}
       .nav{padding:12px 0;}
       .heroCard{padding: 16px; border-radius: 22px; gap: 14px;}
       .heroCard > div:first-child{ order:2; }
-      .heroCard > .banner{ order:1; }
-      .banner{min-height: 190px; border-radius: 16px;}
+      .heroCard > .mockWrap{ order:1; }
+      .mockWrap{min-height: 200px; border-radius: 16px;}
+      .trustRow{grid-template-columns:1fr;}
+      .miniProof{grid-template-columns:1fr;}
       .listShell{ padding: 12px; border-radius: 22px; }
       .promoBar{flex-direction: column; align-items:flex-start; gap: 10px; border-radius: 18px;}
       .promoRight{ max-width: 100%; justify-content:flex-start; }
       .voucherBar{flex-direction: column; align-items:flex-start; gap:10px; border-radius: 18px;}
       .voucherBtn{width:100%;}
       .grid{ grid-template-columns: 1fr; gap: 14px; }
-      .card{ border-radius: 18px; padding: 16px; }
-      .btn{ padding: 12px 14px; font-size: 14px; }
+      .card{ border-radius: 18px; padding: 14px; }
+      .finalBtn{width:100%;}
     }
     @media (max-width: 390px){
       .container{ padding: 0 12px; }
@@ -447,7 +780,7 @@
           <div class="logo">RK</div>
           <div>
             <h1>RASAKITAE</h1>
-            <p>Resep Makanan Sehat yang Mudah Dibuat</p>
+            <p>Resep Sehat • Praktis • Anti Ribet</p>
           </div>
         </div>
 
@@ -463,22 +796,55 @@
     <section class="heroWrap" id="home">
       <div class="heroCard">
         <div>
+          <div class="tagRow">
+            <span class="tag">📲 PDF Digital</span>
+            <span class="tag">⏱️ 10–20 Menit</span>
+            <span class="tag">🥗 Low Oil</span>
+            <span class="tag">💸 Hemat Budget</span>
+          </div>
+
           <h2 class="heroTitle">
-            Semua Resep Sehat, <span class="green">Rasakitae</span> <span class="blue">Aja!</span>
+            Masak Sehat Nggak Harus Ribet —
+            <span class="green">Rasakitae</span> <span class="blue">Bantu Kamu Mulai</span>
           </h2>
+
           <p class="heroDesc">
-            Resep digital sehat dengan langkah jelas, praktis untuk masak harian, bekal, dan ide jualan. 📲🍳
+            Capek mikir “mau masak apa” tiap hari? Ujungnya pesan makanan, keluar biaya lebih, dan susah kontrol minyak, garam, dan kalori.
+            Kalau dibiarkan, pola makan jadi makin berantakan—padahal badan butuh konsisten.
           </p>
 
+          <div class="trustRow">
+            <div class="trustItem">✅ Akses instan (digital)</div>
+            <div class="trustItem">✅ Step jelas & ringkas</div>
+            <div class="trustItem">✅ Bahan mudah dicari</div>
+            <div class="trustItem">✅ Cocok pemula</div>
+          </div>
+
+          <div class="miniProof">
+            <div class="proofItem">
+              <strong>Step-by-step jelas</strong>
+              <span>Takaran, waktu, dan cara masak ringkas.</span>
+            </div>
+            <div class="proofItem">
+              <strong>Realistis untuk harian</strong>
+              <span>Nggak butuh bahan aneh-aneh.</span>
+            </div>
+            <div class="proofItem">
+              <strong>Bisa jadi ide jualan</strong>
+              <span>Menu simple, mudah di-scale.</span>
+            </div>
+          </div>
+
           <div class="heroCtas">
-            <button class="cta primary" type="button" onclick="scrollToId('packs')">Lihat Paket Resep</button>
-            <button class="cta" type="button" onclick="scrollToId('about')">Tentang Rasakitae</button>
+            <button class="cta primary" type="button" onclick="scrollToId('packs')">Ambil Resep Promo</button>
+            <button class="cta ghost" type="button" onclick="scrollToId('proof')">Lihat Testimoni</button>
           </div>
         </div>
 
-        <!-- BANNER GAMBAR -->
-        <div class="banner" aria-label="Banner promo">
-          <img src="gambar2.png" alt="Banner Rasakitae" class="bannerImg">
+        <!-- HERO MOCKUP -->
+        <div class="mockWrap" aria-label="Mockup produk Rasakitae">
+          <img src="img/gambar2.png" alt="Mockup Produk Rasakitae" class="mockHeroImg">
+          <div class="mockBadge">🔥 Produk Digital (PNG/PDF) • Akses Instan</div>
         </div>
       </div>
     </section>
@@ -489,11 +855,32 @@
         <div class="promoBar">
           <div class="promoLeft">
             <span style="font-size:18px">🔥</span>
-            <span>RESEP DEALS</span>
+            <span>RESEP DEALS HARI INI</span>
           </div>
           <div class="promoRight">
-            <span class="pill warn">90% OFF</span>
-            <span class="pill">Special Promo!</span>
+            <span class="pill warn">Diskon sampai 90%</span>
+            <span class="pill">Stok promo terbatas</span>
+            <span class="pill">Akses instan</span>
+          </div>
+        </div>
+
+        <div class="pas">
+          <div>
+            <h3>Sering gagal konsisten makan sehat?</h3>
+            <p>
+              Biasanya bukan karena kamu malas, tapi karena resep terlalu rumit dan nggak realistis.
+              Akhirnya balik lagi ke menu “yang penting kenyang”.
+            </p>
+            <ul>
+              <li>Waktu kebuang buat mikir menu</li>
+              <li>Budget bocor karena sering order</li>
+              <li>Diet berhenti karena makanan nggak enak/repot</li>
+            </ul>
+          </div>
+          <div class="pasBox">
+            <strong>Solusinya: Resep Rasakitae</strong>
+            <span>Resep digital ringkas, bahan sederhana, cocok untuk pemula.</span>
+            <button class="ctaSmall" type="button" onclick="scrollToId('productGrid')">Pilih Resep Sekarang</button>
           </div>
         </div>
 
@@ -503,50 +890,104 @@
             <div class="badge90">VOUCHER</div>
             <div class="voucherText">
               <strong>Klaim voucher kamu sekarang</strong>
-              <span>Klik “Klaim di sini” untuk munculin kode voucher dan bisa langsung di pakai.</span>
+              <span>Klik “Klaim Voucher”, salin kodenya, lalu tempel saat checkout.</span>
             </div>
           </div>
-          <button class="voucherBtn" type="button" onclick="openVoucher()">Klaim di sini</button>
+          <button class="voucherBtn" type="button" onclick="openVoucher()">Klaim Voucher</button>
         </div>
       </section>
 
       <!-- PRODUK -->
-      <section class="grid" id="productGrid">
-        <!-- Diisi otomatis oleh JS (biar gampang ganti link) -->
-      </section>
+      <section class="grid" id="productGrid"></section>
+      <div class="note">Klik “Beli Sekarang” lalu kamu akan diarahkan ke halaman checkout.</div>
     </section>
 
-    <!-- ABOUT + FAQ -->
-    <section class="twoCol" id="about">
+    <!-- SOCIAL PROOF -->
+    <section class="twoCol" id="proof">
       <div class="panel">
-        <h3>Tentang Rasakitae</h3>
-        <p>
-          Rasakitae adalah platform resep makanan sehat berbasis digital yang menghadirkan panduan memasak praktis, terstruktur, dan mudah dipahami. Setiap resep dirancang dengan takaran jelas, langkah sederhana, serta pilihan bahan yang mudah ditemukan, sehingga cocok untuk kebutuhan masak harian, bekal sehat, hingga ide jualan rumahan. Rasakitae membantu siapa pun memasak lebih sehat, hemat waktu, dan tetap lezat setiap hari.
-        </p>
+        <h3>Yang Mereka Rasakan (Testimoni)</h3>
+        <p>Contoh testimoni (dummy). Nanti bisa kamu ganti dengan testimoni pelanggan.</p>
+
+        <div class="proofGrid">
+          <div class="tCard">
+            <div class="tTop">
+              <div class="tName">Nadia • Jakarta</div>
+              <div class="tStars">★★★★★</div>
+            </div>
+            <p class="tMsg">“Tiap hari bingung menu. Sekarang tinggal buka resep, masak 15 menit. Hemat & enak.”</p>
+            <span class="tTag">Menu harian</span>
+          </div>
+
+          <div class="tCard">
+            <div class="tTop">
+              <div class="tName">Rizky • Bekasi</div>
+              <div class="tStars">★★★★★</div>
+            </div>
+            <p class="tMsg">“Step jelas, bahan gampang. Cocok untuk pemula. Aku repeat pepes tahu.”</p>
+            <span class="tTag">Pemula friendly</span>
+          </div>
+
+          <div class="tCard">
+            <div class="tTop">
+              <div class="tName">Dewi • Depok</div>
+              <div class="tStars">★★★★☆</div>
+            </div>
+            <p class="tMsg">“Nggak perlu goreng-goreng. Tetap lezat, lebih ringan buat badan.”</p>
+            <span class="tTag">Low oil</span>
+          </div>
+
+          <div class="tCard">
+            <div class="tTop">
+              <div class="tName">Fajar • Tangerang</div>
+              <div class="tStars">★★★★★</div>
+            </div>
+            <p class="tMsg">“Aku pakai buat ide jualan makan siang. Simple dan mudah di-scale.”</p>
+            <span class="tTag">Ide jualan</span>
+          </div>
+        </div>
       </div>
 
-      <div class="panel">
-        <h3>FAQ</h3>
+      <div class="panel" id="about">
+        <h3>Tentang Rasakitae</h3>
+        <p>
+          Rasakitae adalah platform resep makanan sehat berbasis digital dengan panduan memasak praktis,
+          takaran jelas, dan langkah sederhana. Cocok untuk masak harian, bekal, hingga ide jualan rumahan.
+        </p>
 
         <details>
           <summary>Format resepnya apa?</summary>
-          <p>Resep tersedia dalam format digital PDF  dengan langkah jelas dan ringkas.</p>
+          <p>Resep tersedia dalam format digital dan bisa diakses dengan cepat.</p>
         </details>
 
         <details>
           <summary>Apakah cocok untuk pemula?</summary>
-          <p>Cocok. Resep dibuat sederhana dengan bahan mudah dicari.</p>
+          <p>Cocok. Resep dibuat sederhana dengan bahan yang mudah dicari.</p>
         </details>
 
         <details>
           <summary>Setelah beli, dapatnya lewat apa?</summary>
-          <p>Link tombol “Beli” bisa diarahkan ke checkout lalu mendapatkan file PDF nya.</p>
+          <p>Kamu akan diarahkan ke checkout. Setelah order, kamu mendapatkan akses sesuai produk.</p>
         </details>
       </div>
     </section>
 
+    <!-- FINAL CTA -->
+    <section class="finalCta" aria-label="Call to Action">
+      <div>
+        <strong>Siap mulai makan sehat dari menu yang realistis?</strong>
+        <span>Klaim voucher, pilih resep, dan mulai masak hari ini.</span>
+      </div>
+      <button class="finalBtn" type="button" onclick="scrollToId('packs')">Ambil Resep Promo Sekarang</button>
+    </section>
+
     <footer>© 2025 Rasakitae • Resep Digital</footer>
   </main>
+
+  <!-- STICKY CTA (Mobile) -->
+  <div class="stickyCta" id="stickyCta" aria-label="Quick actions">
+    <button class="stickyBtn ghost" type="button" onclick="openVoucher()">Klaim Voucher</button>
+    <button class="stickyBtn primary" type="button" onclick="scrollToId('packs')">Lihat Paket</button>
+  </div>
 
   <!-- MODAL VOUCHER -->
   <div class="modalOverlay" id="voucherModal" aria-hidden="true">
@@ -571,57 +1012,59 @@
   </div>
 
   <script>
-    // ====== TEMPAT NARUH LINK PRODUK (EDIT DI SINI) ======
+    // ====== TEMPAT NARUH PRODUK + MOCKUP PNG (EDIT DI SINI AJA) ======
+    // Pastikan file PNG ada di folder: img/
     const PRODUCTS = [
-  {
-    name: "Resep Tahu Kukus Sayur Sehat",
-    icon: "🍽️", // menu sehat / hidangan utama
-    desc: "Resep tahu kukus rendah minyak yang kaya serat dan protein nabati, mudah dibuat dengan bahan sederhana.",
-    url: "http://lynk.id/rasakitae/8m1gkzdwrk2v/checkout"
-  },
-  {
-    name: "Resep Sup Bening Ayam Sayur",
-    icon: "🍲", // sup
-    desc: "Sup hangat rendah lemak dengan ayam dan sayur segar, cocok untuk menu sehat harian.",
-    url: "http://lynk.id/rasakitae/3o6wlp46zlz6/checkout"
-  },
-  {
-    name: "Resep Tumis Jamur Tanpa Minyak",
-    icon: "🍳", // proses memasak / tumis
-    desc: "Tumis jamur praktis tanpa minyak, gurih alami dan ramah diet.",
-    url: "http://lynk.id/rasakitae/zej1yz6z1r17/checkout"
-  },
-  {
-    name: "Resep Pepes Tahu Sayur Sehat",
-    icon: "♨️", // kukus / pepes
-    desc: "Pepes tahu kaya rempah dengan sayuran, lezat tanpa digoreng dan menyehatkan tubuh.",
-    url: "http://lynk.id/rasakitae/op75ljympmky/checkout"
-  },
-  {
-    name: "Resep Sayur Rebus Sambal Sehat",
-    icon: "🥗", // sayur rebus / salad
-    desc: "Sayuran rebus segar dengan sambal sehat, rendah kalori dan tetap nikmat.",
-    url: "http://lynk.id/rasakitae/r2o1ygmgyn3l/checkout"
-  },
-  {
-    name: "Resep Oseng Tempe Sayur Sehat",
-    icon: "🔥", // oseng / masak cepat
-    desc: "Oseng tempe bernutrisi tinggi, kaya protein nabati, pas untuk menu sehat cocok dikonsumsi setiap hari.",
-    url: "http://lynk.id/rasakitae/y5j42g4vr9wp/checkout"
-  },
-];
+      {
+        name: "Resep Tahu Kukus Sayur Sehat",
+        desc: "Tahu kukus rendah minyak, kaya serat & protein nabati. Praktis dan kenyang.",
+        img: "img/tahu-kukus.png",
+        url: "http://lynk.id/rasakitae/8m1gkzdwrk2v/checkout",
+        badge: "🔥 Best Seller"
+      },
+      {
+        name: "Resep Sup Bening Ayam Sayur",
+        desc: "Sup hangat rendah lemak, cocok untuk menu sehat harian dan recovery.",
+        img: "img/sup-bening.png",
+        url: "http://lynk.id/rasakitae/3o6wlp46zlz6/checkout"
+      },
+      {
+        name: "Resep Tumis Jamur Tanpa Minyak",
+        desc: "Tumis jamur tanpa minyak, gurih alami, ramah diet, dan cepat dibuat.",
+        img: "img/tumis-jamur.png",
+        url: "http://lynk.id/rasakitae/zej1yz6z1r17/checkout"
+      },
+      {
+        name: "Resep Pepes Tahu Sayur Sehat",
+        desc: "Pepes kaya rempah, tanpa digoreng. Enak, wangi, dan ringan buat badan.",
+        img: "img/pepes-tahu.png",
+        url: "http://lynk.id/rasakitae/op75ljympmky/checkout"
+      },
+      {
+        name: "Resep Sayur Rebus Sambal Sehat",
+        desc: "Sayur rebus segar + sambal sehat. Rendah kalori tapi tetap nikmat.",
+        img: "img/sayur-rebus.png",
+        url: "http://lynk.id/rasakitae/r2o1ygmgyn3l/checkout"
+      },
+      {
+        name: "Resep Oseng Tempe Sayur Sehat",
+        desc: "Oseng tempe bernutrisi tinggi, pas untuk menu harian yang realistis.",
+        img: "img/oseng-tempe.png",
+        url: "http://lynk.id/rasakitae/y5j42g4vr9wp/checkout"
+      },
+    ];
 
-
-    // ====== Render produk ke grid (biar ga perlu copy-paste card) ======
+    // Render produk
     const grid = document.getElementById("productGrid");
     grid.innerHTML = PRODUCTS.map((p) => `
       <article class="card">
-        <div class="icon">${p.icon}</div>
-        <div style="flex:1">
-          <h4>${p.name}</h4>
-          <p>${p.desc}</p>
-          <button class="btn" type="button" onclick="openPack('${escapeQuotes(p.name)}')">Beli Sekarang</button>
+        <div class="product-img">
+          ${p.badge ? `<div class="bestBadge">${p.badge}</div>` : ``}
+          <img src="${p.img}" alt="${p.name}">
         </div>
+        <h4>${p.name}</h4>
+        <p>${p.desc}</p>
+        <button class="btn" type="button" onclick="openPack('${escapeQuotes(p.name)}')">Beli Sekarang</button>
       </article>
     `).join("");
 
@@ -629,7 +1072,6 @@
       return String(str).replace(/'/g, "\\'");
     }
 
-    // ====== Open link sesuai produk ======
     function openPack(name){
       const item = PRODUCTS.find(p => p.name === name);
       if(!item || !item.url){
